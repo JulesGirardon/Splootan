@@ -322,7 +322,7 @@ MonoBehaviour:
   textureWidth: 256
   textureHeight: 256
   brushSize: 20
-  alphaIncrease: 15
+  alphaIncrease: 255
 --- !u!1 &422825185 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8112499145abe69499bec1bdd4462b84, type: 3}
@@ -500,6 +500,7 @@ GameObject:
   - component: {fileID: 1420239533}
   - component: {fileID: 1420239536}
   - component: {fileID: 1420239537}
+  - component: {fileID: 1420239538}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -660,6 +661,99 @@ MonoBehaviour:
     m_Reference: {fileID: 0}
   projectilePrefab: {fileID: 2998874678177740103, guid: aeee6737be5918041aeed7cea4cbabc2, type: 3}
   projectileSpeed: 10
+--- !u!114 &1420239538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420239532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff44a0c9875ed549bf85c8be4eac2a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Left
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 6df5394e-b062-4870-bbbd-2c87c4e751ab
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 80338654-3ac7-4ce9-826d-7afe222588ee
+        m_Path: <Keyboard>/a
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Left
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  rightAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Right
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 6c8be387-2b3d-4d84-9a58-e7ee25eabbb2
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 3ddcaff3-7952-43c1-93ae-73a3f78d96bd
+        m_Path: <Keyboard>/d
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Right
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  upAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Up
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 2e590566-7622-4210-9e9c-99f8fc225351
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: e47c43e5-e33d-4539-86ea-295916d07df6
+        m_Path: <Keyboard>/w
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Up
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  downAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Down
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 97149c43-d36f-431c-a025-6048c182a9ee
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: e5685fe9-5fc5-420c-a7f7-d111c293f798
+        m_Path: <Keyboard>/s
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Down
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  movementSpeed: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
