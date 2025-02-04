@@ -23,7 +23,7 @@ Material:
   m_Name: LaserBeamShader Variant
   m_Shader: {fileID: -6465566751694194690, guid: 1c6ee70a9700d0d4aa60c1eba6c24a91, type: 3}
   m_Parent: {fileID: -876546973899608171, guid: 1c6ee70a9700d0d4aa60c1eba6c24a91, type: 3}
-  m_ModifiedSerializedProperties: 2
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
@@ -38,15 +38,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats:
-    - _BUILTIN_QueueControl: 0
-    - _DissolveAmount: 0.857
-    - _NoiseAmount: 0.1
-    - _NoisePower: 1
-    - _QueueControl: 0
+    m_Floats: []
     m_Colors:
-    - _Color: {r: 4.9882355, g: 4.845895, b: 5.9921575, a: 1}
-    - _NoiseSpeed: {r: -1, g: 0, b: 0, a: 0}
+    - _Color: {r: 1.9144524, g: 1.9144524, b: 1.9144524, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5137750897159292839

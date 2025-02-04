@@ -38,7 +38,7 @@ Material:
   - MOTIONVECTORS
   - DepthOnly
   - SHADOWCASTER
-  m_LockedProperties: _Blend
+  m_LockedProperties: _BaseMap _Blend
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:

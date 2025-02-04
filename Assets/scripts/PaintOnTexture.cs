@@ -13,7 +13,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
     void Start()
     {
-        material = GetComponent<Renderer>().sharedMaterial;
+        material = GetComponent<Renderer>().material;
 
         editableTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
 
@@ -43,7 +43,9 @@ public class PaintOnGeneratedTexture : MonoBehaviour
                 Color pixelColor = editableTexture.GetPixel(px, py);
 
                 pixelColor.a = Mathf.Clamp01(pixelColor.a + alphaIncrease);
-                pixelColor.r = 1f;
+                pixelColor.r = 0f;
+                pixelColor.g = 214f;
+                pixelColor.b = 255f;  
 
                 editableTexture.SetPixel(px, py, pixelColor);
             }
