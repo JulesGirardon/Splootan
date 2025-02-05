@@ -57,6 +57,9 @@ public class ClickScript : MonoBehaviour
                     if (impact != null)
                     {
                         impact.SetActive(true);
+                        impact.transform.position = hit.point;
+
+
                     }
 
                     Renderer renderer = hit.collider.GetComponent<Renderer>();
