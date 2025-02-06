@@ -35,22 +35,17 @@ public class ClickScript : MonoBehaviour
             if (laser != null)
             {
                 laser.SetActive(true);
-
-                if (impact != null)
-                {
-                    impact.SetActive(false);
-                }
             }
 
             Debug.DrawRay(gunTip.position, gunTip.forward * rayLength, Color.red);
 
             RaycastHit hit;
+            // Si le raycast touche un objet...
             if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, rayLength))
             {
                 Debug.Log($"Touché : {hit.collider.gameObject.name} à {hit.point}");
 
-                
-
+                // On vérifie si l'objet touché possède le script de peinture
                 PaintOnGeneratedTexture paintScript = hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
                 if (paintScript != null)
                 {
@@ -58,8 +53,6 @@ public class ClickScript : MonoBehaviour
                     {
                         impact.SetActive(true);
                         impact.transform.position = hit.point;
-
-
                     }
 
                     Renderer renderer = hit.collider.GetComponent<Renderer>();
@@ -70,6 +63,22 @@ public class ClickScript : MonoBehaviour
                         paintScript.PaintAtUV(uv);
                     }
                 }
+                // Si l'objet touché ne possède pas le script, on désactive l'impact
+                else
+                {
+                    if (impact != null)
+                    {
+                        impact.SetActive(false);
+                    }
+                }
+            }
+            // Si le raycast ne touche rien, on désactive également l'impact
+            else
+            {
+                if (impact != null)
+                {
+                    impact.SetActive(false);
+                }
             }
         }
         else
@@ -77,6 +86,10 @@ public class ClickScript : MonoBehaviour
             if (laser != null)
             {
                 laser.SetActive(false);
+                if (impact != null)
+                {
+                    impact.SetActive(false);
+                }
             }
         }
     }
