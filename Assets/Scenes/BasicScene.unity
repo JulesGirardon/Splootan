@@ -544,13 +544,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 603110266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fcaaec899feae740acbc76be6972f39, type: 3}
+  m_Script: {fileID: 11500000, guid: 2257eb730ca1bb141857a5fc1c0035d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureWidth: 1920
-  textureHeight: 1920
+  textureWidth: 256
+  textureHeight: 256
   brushSize: 40
-  alphaIncrease: 255
+  alphaIncrease: 0.1
 --- !u!64 &603110271
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeInterval: 0.5
-  fadeAmount: 0.05
+  fadeAmount: 10
   triggerAction:
     m_UseReference: 0
     m_Action:
@@ -10742,8 +10742,8 @@ Transform:
   m_GameObject: {fileID: 1857688550}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.671}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.126, z: 0.726}
+  m_LocalScale: {x: 1.1237, y: 1.1237, z: 1.1237}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 954746300}
