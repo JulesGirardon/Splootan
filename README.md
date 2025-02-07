@@ -9,30 +9,20 @@ Museum Paintball 3 est un jeu en réalité virtuelle où le joueur doit révéle
 - [⚙️ Fonctionnalités](#️-fonctionnalités)
 - [📸 Captures d'écran](#-captures-décran)
 - [🚀 Installation](#-installation)
-- [🛠️ Technologies](#️-technologies)
-- [📂 Structure du projet](#-structure-du-projet)
-- [🖥️ Développement](#️-développement)
-- [📝 Roadmap](#-roadmap)
-- [📌 Contribution](#-contribution)
-- [📜 Licence](#-licence)
-- [📞 Contact](#-contact)
 
 ---
 
 ## 🎮 **Gameplay**
-- Le joueur utilise un **pistolet à peinture** pour révéler des **statues invisibles**.
-- **Différents types de peinture** : éphémères, solides, lavables...
+- Le joueur utilise un **pistolet à peinture laser** pour révéler des **statues invisibles**.
 - **Rotation de la statue** pour forcer une couverture complète.
-- **Effets immersifs** : particules, son 3D, vibrations haptiques.
+- **Mouvemennt de certaines statues** pour ajouter du challenge
 
 ---
 
 ## ⚙️ **Fonctionnalités**
 ✅ **Projection de peinture dynamique**  
-✅ **Shaders pour révélation progressive**  
-✅ **Physique réaliste des particules**  
+✅ **Texture pour révélation progressive**  
 ✅ **Gestion des matériaux et interactions**  
-✅ **Expérience immersive en VR** (son, retour haptique...)  
 
 ---
 
@@ -46,11 +36,10 @@ Ajoute ici des images ou des GIFs du gameplay :
 
 ## 🚀 **Installation**
 ### 🖥️ Prérequis  
-- Unity **2021.3+** (LTS recommandé)  
+- Unity **6** (LTS recommandé)  
 - **XR Interaction Toolkit** pour la VR  
 - **Shader Graph** pour les effets  
 
 ### 📥 Cloner le projet  
 ```bash
-git clone https://github.com/ton-pseudo/museum-paintball-3.git
-cd museum-paintball-3
+git clone https://github.com/JulesGirardon/Splootan
