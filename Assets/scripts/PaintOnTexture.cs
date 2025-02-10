@@ -8,31 +8,31 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     public float brushSize = 20f;
     public float alphaIncrease = 0.1f;
 
-    private Texture2D editableTexture;
+    private Texture2D maskTexture;
     private Material material;
 
     void Start()
     {
-        // Initialise une texture vide et l'assigne au matériau
+        // Récupère le matériau et crée une texture masque vide (alpha = 0 partout)
         material = GetComponent<Renderer>().material;
-        editableTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
-
+        maskTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
         Color[] pixels = new Color[textureWidth * textureHeight];
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = new Color(0, 0, 0, 0);
+            pixels[i] = new Color(0, 0, 255, 0);
         }
-        editableTexture.SetPixels(pixels);
-        editableTexture.Apply();
+        maskTexture.SetPixels(pixels);
+        maskTexture.Apply();
 
-        material.mainTexture = editableTexture;
+        // Affecte la texture masque à la propriété "Mask" du shader
+        material.SetTexture("_Mask", maskTexture);
     }
 
     public void PaintAtUV(Vector2 uv)
     {
-        // Applique un effet de tache de peinture avec un dégradé radial
-        int centerX = (int)(uv.x * editableTexture.width);
-        int centerY = (int)(uv.y * editableTexture.height);
+        // Calcule la position centrale sur le masque et applique un dégradé radial
+        int centerX = (int)(uv.x * maskTexture.width);
+        int centerY = (int)(uv.y * maskTexture.height);
         int radius = Mathf.FloorToInt(brushSize / 2);
 
         for (int i = -radius; i <= radius; i++)
@@ -43,27 +43,23 @@ public class PaintOnGeneratedTexture : MonoBehaviour
                 if (distance <= 1f)
                 {
                     float intensity = Mathf.Pow(1f - distance, 2);
+                    int targetX = Mathf.Clamp(centerX + i, 0, maskTexture.width - 1);
+                    int targetY = Mathf.Clamp(centerY + j, 0, maskTexture.height - 1);
 
-                    int targetX = Mathf.Clamp(centerX + i, 0, editableTexture.width - 1);
-                    int targetY = Mathf.Clamp(centerY + j, 0, editableTexture.height - 1);
-
-                    Color targetColor = editableTexture.GetPixel(targetX, targetY);
+                    Color targetColor = maskTexture.GetPixel(targetX, targetY);
                     targetColor.a = Mathf.Clamp01(targetColor.a + alphaIncrease * intensity);
-                    targetColor.r = 0f;
-                    targetColor.g = 214f / 255f;
-                    targetColor.b = 255f / 255f;
-
-                    editableTexture.SetPixel(targetX, targetY, targetColor);
+                    maskTexture.SetPixel(targetX, targetY, targetColor);
                 }
             }
         }
+        maskTexture.Apply();
 
-        // Met à jour la texture affichée
-        editableTexture.Apply();
+        // Met à jour la propriété "Mask" du shader avec la texture modifiée
+        material.SetTexture("Mask", maskTexture);
     }
 
-    public Texture2D GetTexture()
+    public Texture2D GetMaskTexture()
     {
-        return editableTexture;
+        return maskTexture;
     }
 }
