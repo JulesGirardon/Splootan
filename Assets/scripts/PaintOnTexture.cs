@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 public class PaintOnGeneratedTexture : MonoBehaviour
@@ -13,24 +13,22 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
     void Start()
     {
-        // Récupère le matériau et crée une texture masque vide (alpha = 0 partout)
         material = GetComponent<Renderer>().material;
         maskTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
+
         Color[] pixels = new Color[textureWidth * textureHeight];
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = new Color(0, 0, 255, 0);
+            pixels[i] = new Color(0, 0, 255, 0); // Transparent blue
         }
         maskTexture.SetPixels(pixels);
         maskTexture.Apply();
 
-        // Affecte la texture masque à la propriété "Mask" du shader
         material.SetTexture("_Mask", maskTexture);
     }
 
     public void PaintAtUV(Vector2 uv)
     {
-        // Calcule la position centrale sur le masque et applique un dégradé radial
         int centerX = (int)(uv.x * maskTexture.width);
         int centerY = (int)(uv.y * maskTexture.height);
         int radius = Mathf.FloorToInt(brushSize / 2);
@@ -53,13 +51,30 @@ public class PaintOnGeneratedTexture : MonoBehaviour
             }
         }
         maskTexture.Apply();
-
-        // Met à jour la propriété "Mask" du shader avec la texture modifiée
-        material.SetTexture("Mask", maskTexture);
+        material.SetTexture("_Mask", maskTexture);
     }
 
-    public Texture2D GetMaskTexture()
+    public IEnumerator CleanPaint(float duration, float rate)
     {
-        return maskTexture;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            for (int x = 0; x < maskTexture.width; x++)
+            {
+                for (int y = 0; y < maskTexture.height; y++)
+                {
+                    Color pixel = maskTexture.GetPixel(x, y);
+                    pixel.a = Mathf.Clamp01(pixel.a - rate); // Reduce alpha over time
+                    maskTexture.SetPixel(x, y, pixel);
+                }
+            }
+
+            maskTexture.Apply();
+            material.SetTexture("_Mask", maskTexture);
+
+            elapsed += Time.deltaTime;
+            yield return null; // Wait for next frame
+        }
     }
 }
