@@ -23,6 +23,7 @@ public class Menu : MonoBehaviour
     {
         musicVolumeSlider.value = Global.musicVolume;
         sfxVolumeSlider.value = Global.sfxVolume;
+
         textQuality.text = nameQuality[QualitySettings.GetQualityLevel()];
     }
 
