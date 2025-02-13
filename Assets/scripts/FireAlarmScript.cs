@@ -1,36 +1,30 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework.Internal;
 
 public class FireAlarm : MonoBehaviour
 {
-    public ParticleSystem waterEffect;
-    public float cleaningDuration = 5f;
-    public float cleaningRate = 0.02f;
-
-    private bool isActive = false;
+    public ParticleSystem part;
+    public List<ParticleCollisionEvent> collisionEvents;
 
     void Start()
     {
-        if (waterEffect != null)
-        {
-            waterEffect.Stop();
-        }
+        part = GetComponent<ParticleSystem>();
+        collisionEvents = new List<ParticleCollisionEvent>();
     }
-
-    void OnTriggerEnter(Collider other)
+    void OnParticleCollision(GameObject other)
     {
-        if (!isActive)
+        PaintOnGeneratedTexture statue = other.GetComponent<PaintOnGeneratedTexture>();
+        Debug.Log("ouais ya ddes collisions");
+        foreach (ParticleCollisionEvent collisionEvent in collisionEvents)
         {
-            isActive = true;
-            if (waterEffect != null)
-            {
-                waterEffect.Play(); 
-            }
-
-            PaintOnGeneratedTexture[] paintedObjects = FindObjectsOfType<PaintOnGeneratedTexture>();
-            foreach (var obj in paintedObjects)
-            {
-                StartCoroutine(obj.CleanPaint(cleaningDuration, cleaningRate));
-            }
+            Debug.Log("ouais ya ddes evnets");
+            statue.EraseAtUV(collisionEvent.intersection);
         }
+        
     }
+
 }
+
