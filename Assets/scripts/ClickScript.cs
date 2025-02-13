@@ -7,11 +7,11 @@ public class ClickScript : MonoBehaviour
     public Transform gunTip;
     public InputActionProperty triggerAction;
     public float rayLength = 100f;
-
     public GameObject laser;
 
     private GameObject impact;
     private GameObject beam;
+    private Animator animator; // Référence à l'Animator
 
     void Start()
     {
@@ -26,11 +26,22 @@ public class ClickScript : MonoBehaviour
             beam = laser.transform.Find("beam")?.gameObject;
             laser.SetActive(false);
         }
+
+        animator = GetComponent<Animator>();
+        animator.enabled = false; // On désactive l'animation au début
     }
 
     void Update()
     {
-        if (triggerAction.action.IsPressed())
+        bool isTriggerPressed = triggerAction.action.IsPressed();
+
+        // Gérer l'animation de l'arme
+        if (animator != null)
+        {
+            animator.enabled = isTriggerPressed; // Active quand on tire, désactive sinon
+        }
+
+        if (isTriggerPressed)
         {
             if (laser != null)
             {
@@ -40,12 +51,9 @@ public class ClickScript : MonoBehaviour
             Debug.DrawRay(gunTip.position, gunTip.forward * rayLength, Color.red);
 
             RaycastHit hit;
-            // Si le raycast touche un objet...
             if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, rayLength))
             {
                 Debug.Log($"Touché : {hit.collider.gameObject.name} à {hit.point}");
-
-                // On vérifie si l'objet touché possède le script de peinture
                 PaintOnGeneratedTexture paintScript = hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
                 if (paintScript != null)
                 {
@@ -55,30 +63,17 @@ public class ClickScript : MonoBehaviour
                         impact.transform.position = hit.point;
                     }
 
-                    Renderer renderer = hit.collider.GetComponent<Renderer>();
-                    if (renderer != null)
-                    {
-                        Vector2 uv = hit.textureCoord;
-                        Debug.Log($"Coordonnées UV de l'impact : {uv}");
-                        paintScript.PaintAtUV(uv);
-                    }
+                    Vector2 uv = hit.textureCoord;
+                    paintScript.PaintAtUV(uv);
                 }
-                // Si l'objet touché ne possède pas le script, on désactive l'impact
-                else
-                {
-                    if (impact != null)
-                    {
-                        impact.SetActive(false);
-                    }
-                }
-            }
-            // Si le raycast ne touche rien, on désactive également l'impact
-            else
-            {
-                if (impact != null)
+                else if (impact != null)
                 {
                     impact.SetActive(false);
                 }
+            }
+            else if (impact != null)
+            {
+                impact.SetActive(false);
             }
         }
         else
