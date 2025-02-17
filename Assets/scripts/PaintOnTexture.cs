@@ -19,7 +19,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         Color[] pixels = new Color[textureWidth * textureHeight];
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = new Color(0, 0, 255, 255); // Transparent blue
+            pixels[i] = new Color(0, 0, 255, 0); // Transparent blue
         }
         maskTexture.SetPixels(pixels);
         maskTexture.Apply();
@@ -53,31 +53,6 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         maskTexture.Apply();
         material.SetTexture("_Mask", maskTexture);
     }
-
-    public IEnumerator CleanPaint(float duration, float rate)
-    {
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            for (int x = 0; x < maskTexture.width; x++)
-            {
-                for (int y = 0; y < maskTexture.height; y++)
-                {
-                    Color pixel = maskTexture.GetPixel(x, y);
-                    pixel.a = Mathf.Clamp01(pixel.a - rate); // Reduce alpha over time
-                    maskTexture.SetPixel(x, y, pixel);
-                }
-            }
-
-            maskTexture.Apply();
-            material.SetTexture("_Mask", maskTexture);
-
-            elapsed += Time.deltaTime;
-            yield return null; // Wait for next frame
-        }
-    }
-
     public void EraseAtUV(Vector2 uv)
     {
         int centerX = (int)(uv.x * maskTexture.width);
