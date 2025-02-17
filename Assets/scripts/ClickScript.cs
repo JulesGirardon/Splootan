@@ -88,4 +88,9 @@ public class ClickScript : MonoBehaviour
             }
         }
     }
+
+    public bool IsTriggerPressed()
+    {
+        return triggerAction.action.IsPressed();
+    }
 }
