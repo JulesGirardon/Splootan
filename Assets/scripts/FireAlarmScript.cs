@@ -8,6 +8,7 @@ public class FireAlarm : MonoBehaviour
 {
     public ParticleSystem part;
     public List<ParticleCollisionEvent> collisionEvents;
+    public GameObject Statue;
 
     void Start()
     {

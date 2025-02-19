@@ -43,7 +43,7 @@ public class ClickScript : MonoBehaviour
             // Si le raycast touche un objet...
             if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, rayLength))
             {
-                Debug.Log($"Touché : {hit.collider.gameObject.name} à {hit.point}");
+                //Debug.Log($"Touché : {hit.collider.gameObject.name} à {hit.point}");
 
                 // On vérifie si l'objet touché possède le script de peinture
                 PaintOnGeneratedTexture paintScript = hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
@@ -59,7 +59,7 @@ public class ClickScript : MonoBehaviour
                     if (renderer != null)
                     {
                         Vector2 uv = hit.textureCoord;
-                        Debug.Log($"Coordonnées UV de l'impact : {uv}");
+                        //Debug.Log($"Coordonnées UV de l'impact : {uv}");
                         paintScript.PaintAtUV(uv);
                     }
                 }

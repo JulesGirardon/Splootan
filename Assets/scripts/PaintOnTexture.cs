@@ -19,7 +19,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         Color[] pixels = new Color[textureWidth * textureHeight];
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = new Color(0, 0, 255, 0); // Transparent blue
+            pixels[i] = new Color(0, 0, 255, 255); // Transparent blue
         }
         maskTexture.SetPixels(pixels);
         maskTexture.Apply();
