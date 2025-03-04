@@ -71,6 +71,7 @@ public class ClickScript : MonoBehaviour
                         Vector2 uv = hit.textureCoord;
                         //Debug.Log($"Coordonnées UV de l'impact : {uv}");
                         paintScript.PaintAtUV(uv);
+                        paintScript.CalculatePaintArea();                   
                     }
                 }
                 else if (impact != null)
