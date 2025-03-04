@@ -33,22 +33,25 @@ public class CameraShakeOnShoot : MonoBehaviour
 
     void Update()
     {
-        if (clickScript != null && clickScript.IsTriggerPressed())
+        if (Global.haptic)
         {
-            StartShake();
-        }
-
-        if (isShaking)
-        {
-            if (shakeTimer > 0)
+            if (clickScript != null && clickScript.IsTriggerPressed())
             {
-                cameraTransform.localPosition = originalCameraPosition + Random.insideUnitSphere * shakeIntensity;
-                shakeTimer -= Time.deltaTime;
+                StartShake();
             }
-            else
+
+            if (isShaking)
             {
-                cameraTransform.localPosition = originalCameraPosition;
-                isShaking = false;
+                if (shakeTimer > 0)
+                {
+                    cameraTransform.localPosition = originalCameraPosition + Random.insideUnitSphere * shakeIntensity;
+                    shakeTimer -= Time.deltaTime;
+                }
+                else
+                {
+                    cameraTransform.localPosition = originalCameraPosition;
+                    isShaking = false;
+                }
             }
         }
     }

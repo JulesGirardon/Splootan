@@ -19,12 +19,17 @@ public class Menu : MonoBehaviour
     private int indexQuality = 0;
     private string[] nameQuality = { "Très basse", "Basse", "Moyenne", "Haute", "Très haute", "Ultra" };
 
+    public TextMeshProUGUI textHaptic;
+
     private void Awake()
     {
         musicVolumeSlider.value = Global.musicVolume;
         sfxVolumeSlider.value = Global.sfxVolume;
 
         textQuality.text = nameQuality[QualitySettings.GetQualityLevel()];
+
+        if (Global.haptic) textHaptic.text = "Activé";
+        else textHaptic.text = "Désactivé";
     }
 
     public void LoadSceneGame()
@@ -32,7 +37,7 @@ public class Menu : MonoBehaviour
         Global.musicVolume = (int)musicVolumeSlider.value;
         Global.sfxVolume = (int)sfxVolumeSlider.value;
 
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("BasicScene");
     }
 
     public void LoadOptionsMenu()
@@ -76,6 +81,14 @@ public class Menu : MonoBehaviour
         Debug.Log(indexQuality);
         textQuality.text = nameQuality[indexQuality];
         QualitySettings.SetQualityLevel(indexQuality, true);
+    }
+
+    public void HapticEffect()
+    {
+        Global.haptic = !Global.haptic;
+
+        if (Global.haptic) textHaptic.text = "Activé";
+        else textHaptic.text = "Désactivé";
     }
 
     public void QuitGame()

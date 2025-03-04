@@ -18,30 +18,9 @@ public class UI_Manager : MonoBehaviour
     [Tooltip("Main menu game object")]
     public GameObject MainMenu;
 
-    [Tooltip("Main menu game object")]
-    public GameObject ChangeBuseMenu;
-
-    [Tooltip("Dropdown for buse selection")]
-    public TMP_Dropdown dropdownBuse;
-
-    public TMP_Text buseDescription;
-
     void Awake()
     {
         if (canvas) canvas.SetActive(false);
-        if (ChangeBuseMenu) ChangeBuseMenu.SetActive(false);
-
-        if (dropdownBuse)
-        {
-            dropdownBuse.onValueChanged.AddListener(OnDropdownValueChanged);
-
-            foreach (Nuzzle nuzzle in Global.nuzzles)
-            {
-                dropdownBuse.options.Add(new TMP_Dropdown.OptionData(nuzzle.title));
-            }
-
-            buseDescription.text = Global.nuzzles[0].description;
-        }
 
         showUIReference.action.performed += showUI;
     }
@@ -67,25 +46,9 @@ public class UI_Manager : MonoBehaviour
         SceneManager.LoadScene("MenuScene");
     }
 
-    public void ChangeBuse()
-    {
-        if (SpatialPanel)
-        {
-            if (MainMenu) MainMenu.SetActive(false);
-            if (ChangeBuseMenu) ChangeBuseMenu.SetActive(true);
-        }
-    }
-
     public void BackToPauseMenu()
     {
         if (MainMenu) MainMenu.SetActive(true);
-        if (ChangeBuseMenu) ChangeBuseMenu.SetActive(false);
 
     }
-
-    void OnDropdownValueChanged(int index)
-    {
-        buseDescription.text = Global.nuzzles[index].description;
-    }
-
 }
