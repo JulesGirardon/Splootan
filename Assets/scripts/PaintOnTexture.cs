@@ -15,11 +15,11 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     {
         material = GetComponent<Renderer>().material;
         maskTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
-
+        
         Color[] pixels = new Color[textureWidth * textureHeight];
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = new Color(0, 0, 255, 255); // Transparent blue
+            pixels[i] = new Color(0, 0, 0, 0);
         }
         maskTexture.SetPixels(pixels);
         maskTexture.Apply();
@@ -78,5 +78,22 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         }
         maskTexture.Apply();
         material.SetTexture("_Mask", maskTexture);
+    }
+
+    public void CalculatePaintArea()
+    {
+        int paintedPixels = 0;
+        Color[] pixels = maskTexture.GetPixels();
+
+        foreach (Color pixel in pixels)
+        {
+            if (pixel.a > 0f)
+            {
+                paintedPixels++;
+            }
+        }
+
+        float paintedPercentage = (float)paintedPixels / pixels.Length * 100f;
+        Debug.Log("Surface peinte : " + paintedPercentage + "%");
     }
 }
