@@ -215,6 +215,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2257eb730ca1bb141857a5fc1c0035d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureWidth: 256
+  textureHeight: 256
+  brushSize: 20
+  alphaIncrease: 0.1
 --- !u!64 &211177927
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5447,6 +5451,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2257eb730ca1bb141857a5fc1c0035d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureWidth: 256
+  textureHeight: 256
+  brushSize: 20
+  alphaIncrease: 0.1
 --- !u!64 &554342473
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5483,13 +5491,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 603110266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fcaaec899feae740acbc76be6972f39, type: 3}
+  m_Script: {fileID: 11500000, guid: 2257eb730ca1bb141857a5fc1c0035d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   textureWidth: 256
   textureHeight: 256
   brushSize: 20
-  alphaIncrease: 0.07
+  alphaIncrease: 0.08
 --- !u!64 &603110271
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -10926,6 +10934,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2257eb730ca1bb141857a5fc1c0035d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureWidth: 256
+  textureHeight: 256
+  brushSize: 20
+  alphaIncrease: 0.1
 --- !u!64 &1231472285
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -16070,7 +16082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8112499145abe69499bec1bdd4462b84, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.16
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8112499145abe69499bec1bdd4462b84, type: 3}
       propertyPath: m_LocalPosition.y
@@ -16078,7 +16090,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8112499145abe69499bec1bdd4462b84, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.59
+      value: 1.65
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8112499145abe69499bec1bdd4462b84, type: 3}
       propertyPath: m_LocalRotation.w
