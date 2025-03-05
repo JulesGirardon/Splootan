@@ -61,14 +61,14 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _DissolveAmount: 0.84
+    - _DissolveAmount: 0.46
     - _NoiseAmount: 0
     - _NoisePower: 5
     - _NoiseScale: 22
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 766.99615, g: 766.99615, b: 766.99615, a: 1}
+    - _Color: {r: 1024, g: 1024, b: 1024, a: 1}
     - _MainSpeed: {r: 0, g: 0, b: 0, a: 0}
     - _NoiseSpeed: {r: 0.1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

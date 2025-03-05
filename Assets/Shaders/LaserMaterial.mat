@@ -61,7 +61,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _DissolveAmount: 0.6
+    - _DissolveAmount: 0.36
     - _NoiseAmount: 0.41
     - _NoisePower: 2
     - _NoiseScale: 25
