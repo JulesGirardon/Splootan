@@ -34,7 +34,6 @@ public static class Global
         { "UwU", new Vector3(0, 0, 0.00123f) },
     };
 
-
     public static void LoadStatues()
     {
         allStatues = Resources.LoadAll<GameObject>("Statues");
