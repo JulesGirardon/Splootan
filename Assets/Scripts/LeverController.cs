@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -11,13 +13,14 @@ public class LeverController : MonoBehaviour
     private bool isAtPosition1 = true; // Position 1 = (300, 270, 180), Position 2 = (300, 90, 0)
     private float snapSpeed = 5f;
 
-    // Positions possibles
-    private Vector3 position1 = new Vector3(300f, 270f, 180f); // Position 1: 300, 270, 180
-    private Vector3 position2 = new Vector3(300f, 90f, 0f);   // Position 2: 300, 90, 0
+    public List<Vector3> tabPosition;
 
     private Vector3 initialWorldLocation;
 
     private Vector3 activePosition;
+    private int activePositionIndex;
+
+    public bool isDebug = false;
 
     void Start()
     {
@@ -27,18 +30,36 @@ public class LeverController : MonoBehaviour
         grabInteractable.selectEntered.AddListener(OnGrabbed);
         grabInteractable.selectExited.AddListener(OnReleased);
 
-        activePosition = position1;
+        if (tabPosition == null)
+        {
+            tabPosition = new List<Vector3>();
+            tabPosition.Add(new Vector3(0f, 0f, 0f));
+        }
+
+        activePosition = tabPosition[0];
+        activePositionIndex = 0;
+
+        if(!isDebug)
+        {
+            MoveLeverToPosition(activePosition);
+        }
     }
 
     void Update()
     {
-        Debug.Log($"Current eulerAngles: {hingeJoints.transform.eulerAngles}");
-        Debug.Log($"Lever position 1 = {isAtPosition1}");
-
         if (isGrabbed)
         {
-            SnapLeverToPosition();
+            if (isDebug)
+            {
+                Debug.Log($"Current eulerAngles: {hingeJoints.transform.eulerAngles}");
+            } 
+            else
+            {
+                SnapLeverToPosition();
+            }
         }
+
+        
     }
 
     private void SnapLeverToPosition()
@@ -48,12 +69,19 @@ public class LeverController : MonoBehaviour
 
         Vector3 currentAngle = hingeJoints.transform.eulerAngles;
 
-        // Calculer la distance entre la position actuelle et les deux positions possibles
-        float distanceToPosition1 = Vector3.Distance(currentAngle, position1);
-        float distanceToPosition2 = Vector3.Distance(currentAngle, position2);
+        float minDistance = float.MaxValue;
 
-        // Choisir la position la plus proche
-        activePosition = distanceToPosition1 < distanceToPosition2 ? position1 : position2;
+        foreach (Vector3 vec in tabPosition)
+        {
+            float distance = Vector3.Distance(currentAngle, vec);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                activePosition = vec;
+                activePositionIndex = tabPosition.IndexOf(vec);
+            }
+        }
+
         MoveLeverToPosition(activePosition);
     }
 
