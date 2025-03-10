@@ -17,6 +17,10 @@ public class StatuesManager : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log($"Haptic {Global.haptic}");
+        Debug.Log($"Music {Global.musicVolume}");
+        Debug.Log($"Sfx {Global.sfxVolume}");
+
         for (int i = 0; i < platines.Length; i++)
         {
             GameObject statue = Global.allStatues[Random.Range(0, Global.allStatues.Length)];

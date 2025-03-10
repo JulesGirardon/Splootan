@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -10,7 +11,6 @@ public class LeverController : MonoBehaviour
     public HingeJoint hingeJoints;
     private JointMotor hingeMotor;
     private bool isGrabbed = false;
-    private bool isAtPosition1 = true; // Position 1 = (300, 270, 180), Position 2 = (300, 90, 0)
     private float snapSpeed = 5f;
 
     public List<Vector3> tabPosition;
@@ -21,6 +21,10 @@ public class LeverController : MonoBehaviour
     private int activePositionIndex;
 
     public bool isDebug = false;
+
+    [SerializeField] private Function activeFunction;
+
+    private Coroutine launchCoroutine;
 
     void Start()
     {
@@ -36,12 +40,10 @@ public class LeverController : MonoBehaviour
             tabPosition.Add(new Vector3(0f, 0f, 0f));
         }
 
-        activePosition = tabPosition[0];
-        activePositionIndex = 0;
-
-        if(!isDebug)
+        if (!isDebug)
         {
-            MoveLeverToPosition(activePosition);
+            SetSettings(activeFunction);
+            LaunchFunction();
         }
     }
 
@@ -52,14 +54,12 @@ public class LeverController : MonoBehaviour
             if (isDebug)
             {
                 Debug.Log($"Current eulerAngles: {hingeJoints.transform.eulerAngles}");
-            } 
+            }
             else
             {
                 SnapLeverToPosition();
             }
         }
-
-        
     }
 
     private void SnapLeverToPosition()
@@ -93,9 +93,6 @@ public class LeverController : MonoBehaviour
         // Appliquer la position cible directement
         hingeJoints.transform.eulerAngles = targetPosition;
         gameObject.transform.position = initialWorldLocation;
-
-        // Log pour le débogage
-        Debug.Log($"Moving to closest position: {targetPosition}");
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
@@ -108,5 +105,179 @@ public class LeverController : MonoBehaviour
     {
         isGrabbed = false;
         MoveLeverToPosition(activePosition);
+
+        LaunchFunction();
+    }
+
+    private void SetSettings(Function activeFunction)
+    {
+        switch (activeFunction) {
+            case Function.EnableHaptic:
+                if (Global.haptic)
+                {
+                    activePositionIndex = 0;
+                }
+                else
+                {
+                    activePositionIndex = 1;
+                }
+                break;
+            case Function.EnableMusic:
+                if (Global.musicVolume == 0)
+                {
+                    activePositionIndex = 0;
+                }
+                else if (Global.musicVolume == 25)
+                {
+                    activePositionIndex = 1;
+                }
+                else if (Global.musicVolume == 50)
+                {
+                    activePositionIndex = 2;
+                }
+                else if (Global.musicVolume == 75)
+                {
+                    activePositionIndex = 3;
+                }
+                else if (Global.musicVolume == 100)
+                {
+                    activePositionIndex = 4;
+                }
+                break;
+            case Function.EnableSFX:
+                if (Global.sfxVolume == 0)
+                {
+                    activePositionIndex = 0;
+                }
+                else if (Global.sfxVolume == 25)
+                {
+                    activePositionIndex = 1;
+                }
+                else if (Global.sfxVolume == 50)
+                {
+                    activePositionIndex = 2;
+                }
+                else if (Global.sfxVolume == 75)
+                {
+                    activePositionIndex = 3;
+                }
+                else if (Global.sfxVolume == 100)
+                {
+                    activePositionIndex = 4;
+                }
+                break;
+            case Function.ChangeQuality:
+                activePositionIndex = QualitySettings.GetQualityLevel();
+                break;
+        }
+        Debug.Log(activePositionIndex);
+
+        hingeMotor.targetVelocity = 0;
+        hingeJoints.motor = hingeMotor;
+        hingeJoints.transform.eulerAngles = tabPosition[activePositionIndex];
+        gameObject.transform.position = initialWorldLocation;
+    }
+
+    public enum Function
+    {
+        EnableHaptic,
+        EnableMusic,
+        EnableSFX,
+        LaunchGame,
+        ChangeQuality
+    }
+
+    void LaunchFunction()
+    {
+        switch (activeFunction)
+        {
+            case Function.EnableHaptic:
+                EnableHaptic();
+                break;
+            case Function.EnableMusic:
+                EnableSound(ref Global.musicVolume);
+                break;
+            case Function.EnableSFX:
+                EnableSound(ref Global.sfxVolume);
+                break;
+            case Function.LaunchGame:
+                HandleLaunchGame();
+                break;
+            case Function.ChangeQuality:
+                ChangeQuality();
+                break;
+        }
+    }
+
+    private void EnableHaptic()
+    {
+        if (activePositionIndex == 0)
+        {
+            Global.haptic = true;
+        }
+        else
+        {
+            Global.haptic = false;
+        }
+
+    }
+
+    private void EnableSound(ref int sound)
+    {
+        if (activePositionIndex == 0)
+        {
+            sound = 0;
+        }
+        else if (activePositionIndex == 1)
+        {
+            sound = 25;
+        }
+        else if (activePositionIndex == 2 || activePositionIndex == 5)
+        {
+            sound = 50;
+        }
+        else if (activePositionIndex == 3)
+        {
+            sound = 75;
+        }
+        else if (activePositionIndex == 4)
+        {
+            sound = 100;
+        }
+    }
+
+    private void HandleLaunchGame()
+    {
+        if (activePositionIndex == 1)
+        {
+            if (launchCoroutine == null)
+            {
+                launchCoroutine = StartCoroutine(LaunchGameWithDelay());
+            }
+        }
+        else
+        {
+            if (launchCoroutine != null)
+            {
+                StopCoroutine(launchCoroutine);
+                launchCoroutine = null;
+                Debug.Log("Launch cancelled");
+            }
+        }
+    }
+
+    private IEnumerator LaunchGameWithDelay()
+    {
+        yield return new WaitForSeconds(5f);
+        if (activePositionIndex == 1)
+        {
+            Debug.Log("Launching Game");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("BasicScene");
+        }
+    }
+
+    private void ChangeQuality()
+    {
+        QualitySettings.SetQualityLevel(activePositionIndex, true);
     }
 }
