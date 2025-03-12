@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Permet d'enregistrer des variables
 public static class Global
 {
     public static int musicVolume = 50;
@@ -38,7 +39,7 @@ public static class Global
     public static void LoadStatues()
     {
         allStatues = Resources.LoadAll<GameObject>("Statues");
-        Debug.Log("Statues chargées : " + allStatues.Length);
+        Debug.Log("Statues chargï¿½es : " + allStatues.Length);
 
         activeStatues = new List<GameObject>();
 
