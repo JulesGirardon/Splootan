@@ -5,8 +5,8 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 {
     public int textureWidth = 256;
     public int textureHeight = 256;
-    public float brushSize = 20f;
-    public float alphaIncrease = 0.1f;
+    public float brushSize = 28f;
+    public float alphaIncrease = 0.03f;
 
     private Texture2D maskTexture;
     private Material material;
