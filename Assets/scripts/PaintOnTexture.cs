@@ -9,28 +9,27 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     public float alphaIncrease = 0.03f;
 
     private Texture2D maskTexture;
+    private Color[] pixels;
     private Material material;
 
     void Start()
     {
         material = GetComponent<Renderer>().material;
         maskTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
-        
-        Color[] pixels = new Color[textureWidth * textureHeight];
+        pixels = new Color[textureWidth * textureHeight];
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = new Color(0, 0, 0, 0);
+            pixels[i] = new Color(0, 0, 0, 0); // Texture initiale transparente
         }
         maskTexture.SetPixels(pixels);
         maskTexture.Apply();
-
         material.SetTexture("_Mask", maskTexture);
     }
 
     public void PaintAtUV(Vector2 uv)
     {
-        int centerX = (int)(uv.x * maskTexture.width);
-        int centerY = (int)(uv.y * maskTexture.height);
+        int centerX = (int)(uv.x * textureWidth);
+        int centerY = (int)(uv.y * textureHeight);
         int radius = Mathf.FloorToInt(brushSize / 2);
 
         for (int i = -radius; i <= radius; i++)
@@ -40,60 +39,42 @@ public class PaintOnGeneratedTexture : MonoBehaviour
                 float distance = Mathf.Sqrt(i * i + j * j) / radius;
                 if (distance <= 1f)
                 {
-                    float intensity = Mathf.Pow(1f - distance, 2);
-                    int targetX = Mathf.Clamp(centerX + i, 0, maskTexture.width - 1);
-                    int targetY = Mathf.Clamp(centerY + j, 0, maskTexture.height - 1);
+                    int targetX = Mathf.Clamp(centerX + i, 0, textureWidth - 1);
+                    int targetY = Mathf.Clamp(centerY + j, 0, textureHeight - 1);
+                    int index = targetX + targetY * textureWidth;
 
-                    Color targetColor = maskTexture.GetPixel(targetX, targetY);
-                    targetColor.a = Mathf.Clamp01(targetColor.a + alphaIncrease * intensity);
-                    maskTexture.SetPixel(targetX, targetY, targetColor);
+                    float intensity = Mathf.Pow(1f - distance, 2);
+                    pixels[index].a = Mathf.Clamp01(pixels[index].a + intensity * alphaIncrease);
                 }
             }
         }
+        maskTexture.SetPixels(pixels);
         maskTexture.Apply();
-        material.SetTexture("_Mask", maskTexture);
     }
-    public void EraseAtUV(Vector2 uv)
-    {
-        int centerX = (int)(uv.x * maskTexture.width);
-        int centerY = (int)(uv.y * maskTexture.height);
-        int radius = Mathf.FloorToInt(brushSize / 2);
 
-        for (int i = -radius; i <= radius; i++)
+    public void ApplyGravity()
+    {
+        for (int y = textureHeight - 2; y >= 0; y--)
         {
-            for (int j = -radius; j <= radius; j++)
+            for (int x = 0; x < textureWidth; x++)
             {
-                float distance = Mathf.Sqrt(i * i + j * j) / radius;
-                if (distance <= 1f)
+                int index = x + y * textureWidth;
+                int belowIndex = x + (y + 1) * textureWidth;
+
+                if (pixels[index].a > 0.9f && pixels[belowIndex].a < 0.9f)
                 {
-                    float intensity = Mathf.Pow(1f - distance, 2);
-                    int targetX = Mathf.Clamp(centerX + i, 0, maskTexture.width - 1);
-                    int targetY = Mathf.Clamp(centerY + j, 0, maskTexture.height - 1);
-
-                    Color targetColor = maskTexture.GetPixel(targetX, targetY);
-                    targetColor.a = Mathf.Clamp01(targetColor.a - alphaIncrease * intensity);
-                    maskTexture.SetPixel(targetX, targetY, targetColor);
+                    float dripAmount = 0.05f;
+                    pixels[index].a = Mathf.Max(0.85f, pixels[index].a - dripAmount);
+                    pixels[belowIndex].a = Mathf.Min(1.0f, pixels[belowIndex].a + dripAmount * 1.2f);
                 }
             }
         }
+        maskTexture.SetPixels(pixels);
         maskTexture.Apply();
-        material.SetTexture("_Mask", maskTexture);
     }
 
-    public void CalculatePaintArea()
+    void Update()
     {
-        int paintedPixels = 0;
-        Color[] pixels = maskTexture.GetPixels();
-
-        foreach (Color pixel in pixels)
-        {
-            if (pixel.a > 0f)
-            {
-                paintedPixels++;
-            }
-        }
-
-        float paintedPercentage = (float)paintedPixels / pixels.Length * 100f;
-        Debug.Log("Surface peinte : " + paintedPercentage + "%");
+        ApplyGravity();
     }
 }

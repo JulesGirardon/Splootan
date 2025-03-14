@@ -36,7 +36,7 @@ public class FireAlarm : MonoBehaviour
             if (col.Raycast(ray, out RaycastHit hit, 10f))
             {
                 Vector2 uv = hit.textureCoord;
-                statue.EraseAtUV(uv);
+                //statue.EraseAtUV(uv);
             }
             else
             {

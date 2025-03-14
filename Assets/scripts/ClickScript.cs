@@ -1,3 +1,4 @@
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -11,7 +12,9 @@ public class ClickScript : MonoBehaviour
 
     private GameObject impact;
     private GameObject beam;
-    private Animator animator; // Référence à l'Animator
+    private Animator animator;
+
+    private bool isTriggerPressed;
 
     void Start()
     {
@@ -28,17 +31,19 @@ public class ClickScript : MonoBehaviour
         }
 
         animator = GetComponent<Animator>();
-        animator.enabled = false; // On désactive l'animation au début
+        animator.enabled = false;
     }
-
+    public bool getIsTriggerPressed()
+    {
+        return isTriggerPressed;
+    }
     void Update()
     {
-        bool isTriggerPressed = triggerAction.action.IsPressed();
+        isTriggerPressed = triggerAction.action.IsPressed();
 
-        // Gérer l'animation de l'arme
         if (animator != null)
         {
-            animator.enabled = isTriggerPressed; // Active quand on tire, désactive sinon
+            animator.enabled = isTriggerPressed;
         }
 
         if (isTriggerPressed)
@@ -53,9 +58,6 @@ public class ClickScript : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, rayLength))
             {
-                //Debug.Log($"Touché : {hit.collider.gameObject.name} à {hit.point}");
-
-                // On vérifie si l'objet touché possède le script de peinture
                 PaintOnGeneratedTexture paintScript = hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
                 if (paintScript != null)
                 {
@@ -65,14 +67,9 @@ public class ClickScript : MonoBehaviour
                         impact.transform.position = hit.point;
                     }
 
-                    Renderer renderer = hit.collider.GetComponent<Renderer>();
-                    if (renderer != null)
-                    {
-                        Vector2 uv = hit.textureCoord;
-                        //Debug.Log($"Coordonnées UV de l'impact : {uv}");
-                        paintScript.PaintAtUV(uv);
-                        paintScript.CalculatePaintArea();                   
-                    }
+                    Vector2 uv = hit.textureCoord;
+                 
+                    paintScript.PaintAtUV(uv);
                 }
                 else if (impact != null)
                 {
@@ -95,10 +92,5 @@ public class ClickScript : MonoBehaviour
                 }
             }
         }
-    }
-
-    public bool IsTriggerPressed()
-    {
-        return triggerAction.action.IsPressed();
     }
 }

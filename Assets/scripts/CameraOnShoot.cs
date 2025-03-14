@@ -12,8 +12,8 @@ public class CameraShakeOnShoot : MonoBehaviour
     public float shakeIntensity = 0.01f;
 
     [Header("Paramètres Haptique")]
-    public float hapticAmplitude = 0.5f; // Intensité de la vibration (entre 0 et 1)
-    public float hapticDuration = 0.1f;  // Durée de la vibration
+    public float hapticAmplitude = 0.5f;
+    public float hapticDuration = 0.1f;  
 
     private Vector3 originalCameraPosition;
     private bool isShaking = false;
@@ -35,7 +35,7 @@ public class CameraShakeOnShoot : MonoBehaviour
     {
         if (Global.haptic)
         {
-            if (clickScript != null && clickScript.IsTriggerPressed())
+            if (clickScript != null && clickScript.getIsTriggerPressed())
             {
                 StartShake();
             }
