@@ -59,11 +59,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DripSeed: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _dripFactor: 1
+    - _dripStartHeight: 0
     m_Colors:
-    - _FallSpeed: {r: 0, g: -1, b: 0, a: 0}
     - _MainColor: {r: 0.71448904, g: 1.4964464, b: 1.6981132, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

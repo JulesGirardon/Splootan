@@ -53,8 +53,6 @@ public class ClickScript : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, rayLength))
             {
-                //Debug.Log($"Touché : {hit.collider.gameObject.name} à {hit.point}");
-
                 // On vérifie si l'objet touché possède le script de peinture
                 PaintOnGeneratedTexture paintScript = hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
                 if (paintScript != null)
@@ -68,9 +66,10 @@ public class ClickScript : MonoBehaviour
                     Renderer renderer = hit.collider.GetComponent<Renderer>();
                     if (renderer != null)
                     {
-                        Vector2 uv = hit.textureCoord;
-                        //Debug.Log($"Coordonnées UV de l'impact : {uv}");
-                        paintScript.PaintAtUV(uv);
+                        // Convertir la position mondiale en position locale
+                        Vector3 localPoint = hit.collider.transform.InverseTransformPoint(hit.point);
+                        Debug.Log($"Coordonnées locales de l'impact : {localPoint}");
+                        paintScript.PaintAtVertex(localPoint);
                         paintScript.CalculatePaintArea();                   
                     }
                 }

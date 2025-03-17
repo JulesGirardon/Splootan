@@ -19,7 +19,6 @@ public static class Global
         { "companioncube", new Vector3(0.33f, 0.33f, 0.33f) },
         { "duck", new Vector3(0.33f, 0.33f, 0.33f) },
         { "ImAiFairy", new Vector3(0.1342956f, 0.1342956f, 0.1342956f) },
-        { "MayanStatue", new Vector3(0.233828f, 0.233828f, 0.233828f) },
         { "pot", new Vector3(0.33f, 0.33f, 0.33f) },
         { "UwU", new Vector3(0.1453455f, 0.1453455f, 0.1453455f) },
     };
@@ -30,16 +29,24 @@ public static class Global
         { "companioncube", new Vector3(0, 0, 0.00464f) },
         { "duck", new Vector3(0, 0, 0.00275f) },
         { "ImAiFairy", new Vector3(0, 0, 0.001249999f) },
-        { "MayanStatue", new Vector3(0, 0, 0.01211f) },
         { "pot", new Vector3(0, 0, 0.0014f) },
         { "UwU", new Vector3(0, 0, 0.00123f) },
     };
 
+    public static Dictionary<string, float> statuePercentage = new Dictionary<string, float>()
+    {
+        { "base", 0f },
+        { "companioncube", 0f },
+        { "duck", 0f },
+        { "ImAiFairy", 0f },
+        { "pot", 0f },
+        { "UwU", 0f },
+    };
 
     public static void LoadStatues()
     {
         allStatues = Resources.LoadAll<GameObject>("Statues");
-        Debug.Log("Statues charg�es : " + allStatues.Length);
+        Debug.Log("Statues charg es : " + allStatues.Length);
 
         activeStatues = new List<GameObject>();
 
