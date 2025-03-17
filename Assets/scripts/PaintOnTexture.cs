@@ -15,46 +15,6 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
     private const float epsilon = 0.001f;
 
-    public class VertexData
-    {
-        public Vector3 worldPosition;
-        public List<VertexData> neighbors;
-        public int index;
-
-        public VertexData(Vector3 worldPos, int idx)
-        {
-            worldPosition = worldPos;
-            neighbors = new List<VertexData>();
-            index = idx;
-        }
-
-        public void findNeighbour(List<VertexData> vertices, float _epsilon)
-        {
-            foreach (VertexData vd in vertices)
-            {
-                if (CheckDistance(this, vd))
-                {
-                    neighbors.Add(vd);
-                }
-            }
-        }
-    }
-
-    [System.Serializable]
-    public class VertexDataSerializable
-    {
-        public Vector3 localPosition;
-        public int index;
-        public List<int> neighbors;
-    }
-
-    [System.Serializable]
-    public class VertexDataList
-    {
-        public float brushSize;
-        public List<VertexDataSerializable> vertices;
-    }
-
     void Start()
     {
         mesh = GetComponent<MeshFilter>().mesh;
@@ -130,11 +90,6 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         return Mathf.Abs(v1.x - v2.x) < epsilon
             && Mathf.Abs(v1.y - v2.y) < epsilon
             && Mathf.Abs(v1.z - v2.z) < epsilon;
-    }
-
-    public static bool CheckDistance(VertexData origin, VertexData other)
-    {
-        return Vector3.Distance(origin.worldPosition, other.worldPosition) < (brushSize / 100f);
     }
 
     public VertexData findVertexDataByVertex(Vector3 vtx)
