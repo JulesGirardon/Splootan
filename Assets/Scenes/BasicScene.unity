@@ -6801,6 +6801,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: base(Clone)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8112499145abe69499bec1bdd4462b84, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22650,7 +22654,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496363643}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50131aba5468b3643b138c831532eb90, type: 3}
   m_Name: 

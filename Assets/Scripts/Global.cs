@@ -21,6 +21,7 @@ public static class Global
         { "ImAiFairy", new Vector3(0.1342956f, 0.1342956f, 0.1342956f) },
         { "pot", new Vector3(0.33f, 0.33f, 0.33f) },
         { "UwU", new Vector3(0.1453455f, 0.1453455f, 0.1453455f) },
+        { "statyue", new Vector3(0.15f, 0.15f, 0.15f) },
     };
 
     public static Dictionary<string, Vector3> statueLocation = new Dictionary<string, Vector3>()
@@ -31,6 +32,16 @@ public static class Global
         { "ImAiFairy", new Vector3(0, 0, 0.001249999f) },
         { "pot", new Vector3(0, 0, 0.0014f) },
         { "UwU", new Vector3(0, 0, 0.00123f) },
+        { "statyue", new Vector3(0, 0, 0.00805f) },
+    };
+
+    public static Dictionary<string, Quaternion> statueRotation = new Dictionary<
+        string,
+        Quaternion
+    >()
+    {
+        { "pot", new Quaternion(0, 90f, 0, 0f) },
+        { "statyue", new Quaternion(0, 90f, 0, 0f) },
     };
 
     public static Dictionary<string, float> statuePercentage = new Dictionary<string, float>()
@@ -41,6 +52,7 @@ public static class Global
         { "ImAiFairy", 0f },
         { "pot", 0f },
         { "UwU", 0f },
+        { "statyue", 0f },
     };
 
     public static void LoadStatues()

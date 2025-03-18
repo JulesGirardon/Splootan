@@ -1,8 +1,8 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework.Internal;
+using UnityEngine;
 
 public class FireAlarm : MonoBehaviour
 {
@@ -15,10 +15,12 @@ public class FireAlarm : MonoBehaviour
         part = GetComponent<ParticleSystem>();
         collisionEvents = new List<ParticleCollisionEvent>();
     }
+
     void OnParticleCollision(GameObject other)
     {
         PaintOnGeneratedTexture statue = other.GetComponent<PaintOnGeneratedTexture>();
-        if (statue == null) return;
+        if (statue == null)
+            return;
 
         Debug.Log("Collision detected with: " + other.name);
 
@@ -26,17 +28,20 @@ public class FireAlarm : MonoBehaviour
         Debug.Log("Number of collision events: " + numCollisionEvents);
 
         Collider col = other.GetComponent<Collider>();
-        if (col == null) return;
+        if (col == null)
+            return;
 
         for (int i = 0; i < numCollisionEvents; i++)
         {
             Debug.Log("Processing collision event " + i);
-            Vector3 direction = (other.transform.position - collisionEvents[i].intersection).normalized;
+            Vector3 direction = (
+                other.transform.position - collisionEvents[i].intersection
+            ).normalized;
             Ray ray = new Ray(collisionEvents[i].intersection + direction * 0.01f, direction);
             if (col.Raycast(ray, out RaycastHit hit, 10f))
             {
                 Vector2 uv = hit.textureCoord;
-                statue.EraseAtUV(uv);
+                statue.EraseAtVertex(uv);
             }
             else
             {
@@ -44,8 +49,4 @@ public class FireAlarm : MonoBehaviour
             }
         }
     }
-
-
-
 }
-

@@ -15,6 +15,8 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     private Color[] vertexColors;
 
     private const float epsilon = 0.001f;
+    private float flowPaintTimer = 0f;
+    private const float flowPaintInterval = 0.05f;
 
     void Start()
     {
@@ -57,9 +59,14 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         );
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        FlowPaint();
+        flowPaintTimer += Time.deltaTime;
+        if (flowPaintTimer >= flowPaintInterval)
+        {
+            FlowPaint();
+            flowPaintTimer = 0f;
+        }
     }
 
     private void InitializeVertexData()
@@ -140,10 +147,11 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     {
         /*
         TODO
-        Bug : la coulée de peinture ne fonctionne qu'une seule fois.
         Bug : les vertices peints ne sont pas correctement mis à jour, ils ne s'effacent pas.
         Il faut que la coulée de peinture marche si plusieurs endroits sont peints.
         Ajouter nouveaux vertices peints
+
+        
         */
 
         List<PaintedVertex> newPaintedVertices = new List<PaintedVertex>();
@@ -164,24 +172,27 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
             if (currentColor.a > 0)
             {
-                float flowAmount = 0.5f;
-                neighborColor = Color.Lerp(neighborColor, currentColor, flowAmount); // Color.red;
-                vertexColors[neighbor.index] = neighborColor;
+                float flowAmount = 0.4f;
+
+                if (neighborColor.a < 1f)
+                {
+                    neighborColor = Color.Lerp(neighborColor, currentColor, flowAmount);
+                    vertexColors[neighbor.index] = neighborColor;
+
+                    if (neighborColor.a > 0 && !newPaintedVertices.Any(pv => pv.vertex == neighbor))
+                    {
+                        newPaintedVertices.Add(
+                            new PaintedVertex(neighbor, neighbor.closestNeighborBelow)
+                        );
+                    }
+                }
 
                 currentColor.a = Mathf.Max(
                     Mathf.Clamp01(currentColor.a - flowAmount),
                     currentColor.a
                 );
                 vertexColors[vd.index] = currentColor;
-
-                if (neighborColor.a > 0 && !newPaintedVertices.Any(pv => pv.vertex == neighbor))
-                {
-                    newPaintedVertices.Add(
-                        new PaintedVertex(neighbor, neighbor.closestNeighborBelow)
-                    );
-                }
             }
-
             paintedVertices.Remove(paintedVertex);
         }
 
@@ -190,32 +201,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         mesh.colors = vertexColors;
     }
 
-    public void EraseAtUV(Vector2 uv)
-    {
-        // int centerX = (int)(uv.x * maskTexture.width);
-        // int centerY = (int)(uv.y * maskTexture.height);
-        // int radius = Mathf.FloorToInt(brushSize / 2);
-
-        // for (int i = -radius; i <= radius; i++)
-        // {
-        //     for (int j = -radius; j <= radius; j++)
-        //     {
-        //         float distance = Mathf.Sqrt(i * i + j * j) / radius;
-        //         if (distance <= 1f)
-        //         {
-        //             float intensity = Mathf.Pow(1f - distance, 2);
-        //             int targetX = Mathf.Clamp(centerX + i, 0, maskTexture.width - 1);
-        //             int targetY = Mathf.Clamp(centerY + j, 0, maskTexture.height - 1);
-
-        //             Color targetColor = maskTexture.GetPixel(targetX, targetY);
-        //             targetColor.a = Mathf.Clamp01(targetColor.a - alphaIncrease * intensity);
-        //             maskTexture.SetPixel(targetX, targetY, targetColor);
-        //         }
-        //     }
-        // }
-        // maskTexture.Apply();
-        // material.SetTexture("_Mask", maskTexture);
-    }
+    public void EraseAtVertex(Vector2 uv) { }
 
     public void CalculatePaintArea()
     {

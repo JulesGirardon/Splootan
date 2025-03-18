@@ -3,11 +3,10 @@ using UnityEngine;
 public class StatuesManager : MonoBehaviour
 {
     [Header("Statues")]
-
-    [Tooltip("Platines où tournes les statues")]
+    [Tooltip("Platines oï¿½ tournes les statues")]
     public GameObject[] platines;
 
-    [Tooltip("Matériaux des statues")]
+    [Tooltip("Matï¿½riaux des statues")]
     public Material material;
 
     private void Awake()
@@ -32,7 +31,11 @@ public class StatuesManager : MonoBehaviour
 
             Global.activeStatues.Add(statue);
 
-            GameObject statueInstantiate = Instantiate(statue, platines[i].transform.position, statue.transform.rotation);
+            GameObject statueInstantiate = Instantiate(
+                statue,
+                platines[i].transform.position,
+                statue.transform.rotation
+            );
 
             statueInstantiate.AddComponent<MeshCollider>();
             statueInstantiate.AddComponent<PaintOnGeneratedTexture>();
@@ -42,7 +45,12 @@ public class StatuesManager : MonoBehaviour
 
             statueInstantiate.transform.SetParent(platines[i].transform);
 
+            Debug.Log($"Statue {statue.name}");
             statueInstantiate.transform.localPosition = Global.statueLocation[statue.name];
+            if (Global.statueRotation.ContainsKey(statue.name))
+            {
+                statueInstantiate.transform.rotation = Global.statueRotation[statue.name];
+            }
         }
     }
 }
