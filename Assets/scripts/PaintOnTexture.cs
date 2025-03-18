@@ -10,6 +10,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     public Color paintColor = Color.red;
 
     private List<VertexData> vertexDataList;
+    private List<PaintedVertex> paintedVertices = new List<PaintedVertex>();
     private Mesh mesh;
     private Color[] vertexColors;
 
@@ -56,7 +57,10 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         );
     }
 
-    void Update() { }
+    void Update()
+    {
+        FlowPaint();
+    }
 
     private void InitializeVertexData()
     {
@@ -71,7 +75,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
         foreach (VertexData vd in vertexDataList)
         {
-            vd.findNeighbour(vertexDataList, brushSize / 100f);
+            vd.findNeighbour(vertexDataList);
         }
     }
 
@@ -116,7 +120,72 @@ public class PaintOnGeneratedTexture : MonoBehaviour
             Color targetColor = vertexColors[index];
             targetColor = Color.Lerp(targetColor, paintColor, alphaIncrease);
             vertexColors[index] = targetColor;
+
+            if (
+                vd.closestNeighborBelow != null
+                && !paintedVertices.Any(pv =>
+                    pv.vertex == vd && pv.closestNeighborBelow == vd.closestNeighborBelow
+                )
+                && targetColor.a > 0
+            )
+            {
+                paintedVertices.Add(new PaintedVertex(vd, vd.closestNeighborBelow));
+            }
         }
+
+        mesh.colors = vertexColors;
+    }
+
+    private void FlowPaint()
+    {
+        /*
+        TODO
+        Bug : la coulée de peinture ne fonctionne qu'une seule fois.
+        Bug : les vertices peints ne sont pas correctement mis à jour, ils ne s'effacent pas.
+        Il faut que la coulée de peinture marche si plusieurs endroits sont peints.
+        Ajouter nouveaux vertices peints
+        */
+
+        List<PaintedVertex> newPaintedVertices = new List<PaintedVertex>();
+        Debug.Log("Nombre de vertices peints : " + paintedVertices.Count);
+
+        foreach (PaintedVertex paintedVertex in paintedVertices.ToList())
+        {
+            VertexData vd = paintedVertex.vertex;
+            VertexData neighbor = paintedVertex.closestNeighborBelow;
+
+            if (vd == null || neighbor == null)
+            {
+                continue;
+            }
+
+            Color currentColor = vertexColors[vd.index];
+            Color neighborColor = vertexColors[neighbor.index];
+
+            if (currentColor.a > 0)
+            {
+                float flowAmount = 0.5f;
+                neighborColor = Color.Lerp(neighborColor, currentColor, flowAmount); // Color.red;
+                vertexColors[neighbor.index] = neighborColor;
+
+                currentColor.a = Mathf.Max(
+                    Mathf.Clamp01(currentColor.a - flowAmount),
+                    currentColor.a
+                );
+                vertexColors[vd.index] = currentColor;
+
+                if (neighborColor.a > 0 && !newPaintedVertices.Any(pv => pv.vertex == neighbor))
+                {
+                    newPaintedVertices.Add(
+                        new PaintedVertex(neighbor, neighbor.closestNeighborBelow)
+                    );
+                }
+            }
+
+            paintedVertices.Remove(paintedVertex);
+        }
+
+        paintedVertices.AddRange(newPaintedVertices);
 
         mesh.colors = vertexColors;
     }
@@ -209,6 +278,8 @@ public class PaintOnGeneratedTexture : MonoBehaviour
                 localPosition = vd.worldPosition,
                 index = vd.index,
                 neighbors = vd.neighbors.Select(n => n.index).ToList(),
+                closestNeighborBelow =
+                    vd.closestNeighborBelow != null ? vd.closestNeighborBelow.index : -1,
             };
             vertexDataSerializableList.Add(vds);
         }
@@ -250,6 +321,8 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         {
             VertexData vd = vertexDataList[vds.index];
             vd.neighbors = vds.neighbors.Select(index => vertexDataList[index]).ToList();
+            vd.closestNeighborBelow =
+                vds.closestNeighborBelow != -1 ? vertexDataList[vds.closestNeighborBelow] : null;
         }
     }
 }

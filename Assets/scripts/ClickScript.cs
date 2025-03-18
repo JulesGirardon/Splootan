@@ -54,7 +54,8 @@ public class ClickScript : MonoBehaviour
             if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, rayLength))
             {
                 // On vérifie si l'objet touché possède le script de peinture
-                PaintOnGeneratedTexture paintScript = hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
+                PaintOnGeneratedTexture paintScript =
+                    hit.collider.gameObject.GetComponent<PaintOnGeneratedTexture>();
                 if (paintScript != null)
                 {
                     if (impact != null)
@@ -67,10 +68,12 @@ public class ClickScript : MonoBehaviour
                     if (renderer != null)
                     {
                         // Convertir la position mondiale en position locale
-                        Vector3 localPoint = hit.collider.transform.InverseTransformPoint(hit.point);
+                        Vector3 localPoint = hit.collider.transform.InverseTransformPoint(
+                            hit.point
+                        );
                         Debug.Log($"Coordonnées locales de l'impact : {localPoint}");
                         paintScript.PaintAtVertex(localPoint);
-                        paintScript.CalculatePaintArea();                   
+                        // paintScript.CalculatePaintArea();
                     }
                 }
                 else if (impact != null)
