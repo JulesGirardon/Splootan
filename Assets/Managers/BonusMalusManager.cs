@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BonusMalusManager : MonoBehaviour
 {
-    float nbParticles = 5000;
     private static BonusMalusManager _instance;
 
     public static BonusMalusManager Instance

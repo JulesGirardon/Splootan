@@ -192,7 +192,27 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         mesh.colors = vertexColors;
     }
 
-    public void EraseAtVertex(Vector2 uv) { }
+    public void EraseAtVertex(Vector3 vtx)
+    {
+        VertexData targetVertex = findVertexDataByVertex(vtx);
+        if (targetVertex == null)
+            return;
+
+        foreach (VertexData vd in targetVertex.neighbors)
+        {
+            int index = vd.index;
+            Color targetColor = vertexColors[index];
+            targetColor = Color.Lerp(targetColor, paintColor, -alphaIncrease);
+            vertexColors[index] = targetColor;
+
+            if (targetColor.a <= 0)
+            {
+                paintedVertices.RemoveAll(pv => pv.vertex == vd);
+            }
+        }
+
+        mesh.colors = vertexColors;
+    }
 
     public void CalculatePaintArea()
     {

@@ -40,8 +40,8 @@ public class FireAlarm : MonoBehaviour
             Ray ray = new Ray(collisionEvents[i].intersection + direction * 0.01f, direction);
             if (col.Raycast(ray, out RaycastHit hit, 10f))
             {
-                Vector2 uv = hit.textureCoord;
-                statue.EraseAtVertex(uv);
+                Vector3 vtx = hit.collider.transform.InverseTransformPoint(hit.point);
+                statue.EraseAtVertex(vtx);
             }
             else
             {
