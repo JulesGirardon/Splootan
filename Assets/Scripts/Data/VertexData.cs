@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VertexData
 {
-    public Vector3 worldPosition;
+    public Vector3 localPosition;
     public List<VertexData> neighbors;
     public int index;
     public VertexData closestNeighborBelow;
@@ -12,7 +12,7 @@ public class VertexData
 
     public VertexData(Vector3 worldPos, int idx)
     {
-        worldPosition = worldPos;
+        localPosition = worldPos;
         neighbors = new List<VertexData>();
         index = idx;
         closestNeighborsBelow = new List<VertexData>();
@@ -34,9 +34,9 @@ public class VertexData
 
         foreach (VertexData neighbor in neighbors)
         {
-            if (neighbor.worldPosition.y < this.worldPosition.y)
+            if (neighbor.localPosition.y < this.localPosition.y)
             {
-                float distance = Vector3.Distance(this.worldPosition, neighbor.worldPosition);
+                float distance = Vector3.Distance(this.localPosition, neighbor.localPosition);
                 neighborsWithDistance.Add(new KeyValuePair<VertexData, float>(neighbor, distance));
             }
         }
@@ -61,7 +61,7 @@ public class VertexData
 
     public static bool CheckDistance(VertexData origin, VertexData other)
     {
-        return Vector3.Distance(origin.worldPosition, other.worldPosition)
+        return Vector3.Distance(origin.localPosition, other.localPosition)
             < (PaintOnGeneratedTexture.brushSize / 100f);
     }
 }

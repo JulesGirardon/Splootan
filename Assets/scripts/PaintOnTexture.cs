@@ -107,7 +107,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     {
         foreach (VertexData vd in vertexDataList)
         {
-            if (AreVectorsEqual(vd.worldPosition, vtx))
+            if (AreVectorsEqual(vd.localPosition, vtx))
             {
                 return vd;
             }
@@ -145,15 +145,6 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
     private void FlowPaint()
     {
-        /*
-        TODO
-        Bug : les vertices peints ne sont pas correctement mis à jour, ils ne s'effacent pas.
-        Il faut que la coulée de peinture marche si plusieurs endroits sont peints.
-        Ajouter nouveaux vertices peints
-
-        
-        */
-
         List<PaintedVertex> newPaintedVertices = new List<PaintedVertex>();
         Debug.Log("Nombre de vertices peints : " + paintedVertices.Count);
 
@@ -261,7 +252,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         {
             VertexDataSerializable vds = new VertexDataSerializable
             {
-                localPosition = vd.worldPosition,
+                localPosition = vd.localPosition,
                 index = vd.index,
                 neighbors = vd.neighbors.Select(n => n.index).ToList(),
                 closestNeighborBelow =

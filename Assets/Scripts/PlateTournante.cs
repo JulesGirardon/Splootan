@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class StatueRotator : MonoBehaviour
 {
-    [SerializeField] private float rotationSpeed = 10f; // Vitesse de rotation en degrés par seconde
+    [SerializeField]
+    private float rotationSpeed = 10f; // Vitesse de rotation en degrï¿½s par seconde
+
     private bool isRotating = true;
 
     void Update()
@@ -13,13 +15,13 @@ public class StatueRotator : MonoBehaviour
         }
     }
 
-    // Méthode pour activer/désactiver la rotation
+    // Mï¿½thode pour activer/dï¿½sactiver la rotation
     public void ToggleRotation()
     {
         isRotating = !isRotating;
     }
 
-    // Méthode pour modifier la vitesse de rotation dynamiquement
+    // Mï¿½thode pour modifier la vitesse de rotation dynamiquement
     public void SetRotationSpeed(float newSpeed)
     {
         rotationSpeed = newSpeed;
