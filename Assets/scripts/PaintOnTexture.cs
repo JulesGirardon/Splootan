@@ -202,7 +202,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         {
             int index = vd.index;
             Color targetColor = vertexColors[index];
-            targetColor = Color.Lerp(targetColor, paintColor, -alphaIncrease);
+            targetColor = Color.Lerp(targetColor, paintColor, -alphaIncrease * 3);
             vertexColors[index] = targetColor;
 
             if (targetColor.a <= 0)

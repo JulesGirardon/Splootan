@@ -8,8 +8,8 @@ public class TimerManager : MonoBehaviour
     private float currentTime = 0.0f;
     private bool timeRunning = true;
     private float lastAlarmIntervalle = 0f;
-    private float intervalle = 30f; // intervalle en secondes
-    private List<GameObject> alarmList;
+    private float intervalle = 15f; // intervalle en secondes
+    public List<GameObject> alarmList;
 
     private void Awake()
     {
@@ -21,18 +21,16 @@ public class TimerManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-
         if (timeRunning)
         {
             currentTime += Time.deltaTime;
 
-
             Debug.Log(currentTime);
             Debug.Log(lastAlarmIntervalle);
 
-            if (currentTime > lastAlarmIntervalle )
+            if (currentTime > lastAlarmIntervalle)
             {
                 Debug.Log("Je suis ici !");
                 lastAlarmIntervalle = currentTime + intervalle;
@@ -49,7 +47,6 @@ public class TimerManager : MonoBehaviour
             BonusMalusManager.Instance.SpawnAlarm(randomAlarmPrefab);
         }
     }
-
 
     public float GetTimer()
     {
