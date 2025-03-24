@@ -167,7 +167,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
 
                 if (neighborColor.a < 1f)
                 {
-                    neighborColor = Color.Lerp(neighborColor, currentColor, flowAmount);
+                    neighborColor = Color.Lerp(neighborColor, paintColor, flowAmount);
                     vertexColors[neighbor.index] = neighborColor;
 
                     if (neighborColor.a > 0 && !newPaintedVertices.Any(pv => pv.vertex == neighbor))
