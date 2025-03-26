@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PaintOnGeneratedTexture : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     private const float epsilon = 0.001f;
     private float flowPaintTimer = 0f;
     private const float flowPaintInterval = 0.05f;
+    private float calculatePaintedVerticesTimer = 0f;
+
+    private const float calculatePaintedVerticesTimerInterval = 1f;
 
     void Start()
     {
@@ -66,6 +70,13 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         {
             FlowPaint();
             flowPaintTimer = 0f;
+        }
+
+        calculatePaintedVerticesTimer += Time.deltaTime;
+        if (calculatePaintedVerticesTimer >= calculatePaintedVerticesTimerInterval)
+        {
+            CalculatePaintArea();
+            calculatePaintedVerticesTimer = 0f;
         }
     }
 
@@ -146,7 +157,7 @@ public class PaintOnGeneratedTexture : MonoBehaviour
     private void FlowPaint()
     {
         List<PaintedVertex> newPaintedVertices = new List<PaintedVertex>();
-        Debug.Log("Nombre de vertices peints : " + paintedVertices.Count);
+        // Debug.Log("Nombre de vertices peints : " + paintedVertices.Count);
 
         foreach (PaintedVertex paintedVertex in paintedVertices.ToList())
         {
@@ -235,31 +246,10 @@ public class PaintOnGeneratedTexture : MonoBehaviour
         string cleanedName = originalName.Replace("(Clone)", "");
         Global.statuePercentage[cleanedName] = paintedPercentage;
 
-        if (paintedPercentage >= 65f)
+        if (paintedPercentage >= 50f)
         {
             Debug.Log("Statue complète ! (" + gameObject.name + ").");
-            LaunchStatueFinding();
-        }
-    }
-
-    private void LaunchStatueFinding()
-    {
-        GameObject findStatuesObject = GameObject.Find("StatuesManager");
-        if (findStatuesObject != null)
-        {
-            FindStatues findStatuesScript = findStatuesObject.GetComponent<FindStatues>();
-            if (findStatuesScript != null)
-            {
-                findStatuesScript.enabled = true;
-            }
-            else
-            {
-                Debug.LogWarning("Le script FindStatues n'a pas été trouvé sur le GameObject.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Le GameObject avec le script FindStatues n'a pas été trouvé.");
+            SceneManager.LoadScene("ChoiceScene");
         }
     }
 

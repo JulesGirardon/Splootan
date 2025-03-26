@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -22,9 +24,12 @@ public class LeverController : MonoBehaviour
 
     public bool isDebug = false;
 
-    [SerializeField] private Function activeFunction;
+    [SerializeField]
+    private Function activeFunction;
 
     private Coroutine launchCoroutine;
+
+    public Image associatedImage; // Image associée à ce levier
 
     void Start()
     {
@@ -111,7 +116,8 @@ public class LeverController : MonoBehaviour
 
     private void SetSettings(Function activeFunction)
     {
-        switch (activeFunction) {
+        switch (activeFunction)
+        {
             case Function.EnableHaptic:
                 if (Global.haptic)
                 {
@@ -184,13 +190,17 @@ public class LeverController : MonoBehaviour
         EnableMusic,
         EnableSFX,
         LaunchGame,
-        ChangeQuality
+        ChangeQuality,
+        None,
     }
 
     void LaunchFunction()
     {
         switch (activeFunction)
         {
+            case Function.None:
+                CheckWinCondition();
+                break;
             case Function.EnableHaptic:
                 EnableHaptic();
                 break;
@@ -219,7 +229,6 @@ public class LeverController : MonoBehaviour
         {
             Global.haptic = false;
         }
-
     }
 
     private void EnableSound(ref int sound)
@@ -279,5 +288,33 @@ public class LeverController : MonoBehaviour
     private void ChangeQuality()
     {
         QualitySettings.SetQualityLevel(activePositionIndex, true);
+    }
+
+    private void CheckWinCondition()
+    {
+        Debug.Log(FindStatues.correctStatueKey + " ?? " + associatedImage.sprite.name);
+        if (FindStatues.correctStatueKey == associatedImage.sprite.name)
+        {
+            Debug.Log("Félicitations ! Vous avez gagné !");
+
+            var keys = Global.statuePercentage.Keys.ToList();
+            foreach (var key in keys)
+            {
+                Global.statuePercentage[key] = 0f;
+            }
+
+            StartCoroutine(LoadSceneWithDelay("BasicScene", 3f));
+        }
+        else
+        {
+            Debug.Log("Dommage, ce n'est pas la bonne statue.");
+        }
+    }
+
+    private IEnumerator LoadSceneWithDelay(string sceneName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Debug.Log("Chargement de la scène : " + sceneName);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }
